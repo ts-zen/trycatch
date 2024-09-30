@@ -1,22 +1,25 @@
 {
-	"name": "@tszen/trycatch",
-	"version": "0.0.1",
-	"type": "module",
-	"exports": {
-		".": "./dist/index.js"
-	},
-	"types": "dist/index.d.ts",
-	"sideEffects": false,
-	"scripts": {
-		"check": "biome check --write --verbose --files-ignore-unknown true src/** *.*",
-		"build": "tsc --sourceMap --declaration --outDir dist --module ESNext --target ESNext --skipLibCheck src/index.ts",
-		"test:ts": "bun test",
-		"test:types": "tsd -t ./dist/index.d.ts -f ./src/trycatch.test-d.ts -f ./src/macro.test-d.ts"
-	},
-	"devDependencies": {
-		"@biomejs/biome": "^1.9.2",
-		"@types/bun": "^1.1.10",
-		"tsd": "^0.31.2",
-		"typescript": "^5.6.2"
-	}
+  "name": "@tszen/trycatch",
+  "version": "0.0.1",
+  "type": "module",
+  "exports": {
+    ".": "./dist/index.js"
+  },
+  "types": "dist/index.d.ts",
+  "sideEffects": false,
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "check": "biome check --write --verbose --files-ignore-unknown true src/** *.*",
+    "build": "tsc --sourceMap --declaration --outDir dist --module ESNext --target ESNext --skipLibCheck src/index.ts",
+    "test:ts": "bun test",
+    "test:types": "tsd -t ./dist/index.d.ts -f ./src/trycatch.test-d.ts -f ./src/macro.test-d.ts"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^1.9.2",
+    "@types/bun": "^1.1.10",
+    "tsd": "^0.31.2",
+    "typescript": "^5.6.2"
+  }
 }
