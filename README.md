@@ -15,7 +15,8 @@
 
 <h1></h1>
 
-<img src="https://raw.githubusercontent.com/ts-zen/trycatch/refs/heads/main/docs/statics/example.png" width="80%" /> <br>
+<img src="https://raw.githubusercontent.com/ts-zen/trycatch/refs/heads/main/docs/statics/example-dark.png#gh-dark-mode-only" width="80%" /> <br>
+<img src="https://raw.githubusercontent.com/ts-zen/trycatch/refs/heads/main/docs/statics/example-light.png#gh-light-mode-only" width="80%" /> <br>
 
 </div>
 
