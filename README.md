@@ -238,7 +238,7 @@ Here is a list of known limitations:
 
 - `$trycatch` must be passed functions to be executed, rather than their results. While this isn't as seamless as a language feature would behave, it’s a limitation due to the constraints of JavaScript syntax. However, `$macro` and `$try` do not share this issue.
 - Return types must differs from `unknown` or `any`, as these types will obscure the expected error types in the result. You can work around this by wrapping the return value in an object like `{ value }`.
-- Errors and Promises have specific roles when used in return types and cannot be treated as generic values. While we believe this is a positive guideline rather than a limitation, you can still resolve this by using { value } as a wrapper.
+- Errors and Promises have specific roles when used in return types and cannot be treated as generic values. While we believe this is a positive guideline rather than a limitation, you can still resolve this by using `{ value }` as a wrapper.
 - Union types of native JavaScript errors will be simplified in TypeScript to a single error type, losing valuable information. For example, `TypeError | RangeError` will be type reduced to `TypeError`. This is a limitation of the TypeScript errors typings and can be addressed by relying on custom errors and wrapping native ones when needed.
 
 # License
