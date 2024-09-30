@@ -1,0 +1,14 @@
+# Coverage directory
+coverage/
+
+# Dependency directories
+node_modules/
+
+# Environment variables
+.env
+
+# Build files
+dist
+
+# Finder (MacOS) folder config
+.DS_Store
