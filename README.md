@@ -2,7 +2,7 @@
   
 <br>
 
-<img src="docs/statics/logo.svg" width="40%" /> <br>
+<img src="https://raw.githubusercontent.com/ts-zen/trycatch/refs/heads/main/docs/statics/logo.svg" width="40%" /> <br>
 
 **Robust** and **Type-Safe** Errors Management **Conventions** with [`Typescript`](https://www.typescriptlang.org/)
 
@@ -15,7 +15,7 @@
 
 <h1></h1>
 
-<img src="docs/statics/example.png" width="80%" /> <br>
+<img src="https://raw.githubusercontent.com/ts-zen/trycatch/refs/heads/main/docs/statics/example.png" width="80%" /> <br>
 
 </div>
 
