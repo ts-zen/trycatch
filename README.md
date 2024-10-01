@@ -22,9 +22,9 @@
 
 # Philosophy
 
-> Haven’t read the blog post yet? You can find it [here]() for a deep dive into the design and reasoning behind this project. Here's a quick snapshot to get you started:
+> Haven’t read the blog post yet? You can find it [here](https://dev.to/paolimi/typescript-a-new-frontier-for-error-management-4li7) for a deep dive into the design and reasoning behind this project. Here's a quick snapshot to get you started:
 
-JavaScript's **error management design** lags behind modern languages like Rust, Zig, and Go. Language design is hard, and most proposals to the ECMAScript or TypeScript committees are either rejected or move through an extremely slow iteration process.
+JavaScript’s **error management** falls short of the expressive power and developer experience offered by modern languages like Rust, Zig, and Go. Language design is hard, and most proposals to the ECMAScript or TypeScript committees are either rejected or move through an extremely slow iteration process.
 
 Most libraries and user-land solutions in this area introduce abstractions that fall into the red/blue function problem, requiring full codebase adoption and resulting in technology lock-in.
 
@@ -48,13 +48,13 @@ This project aims to enhance JavaScript's try/catch model for error handling by 
 - **Contiguous Control Flow**: Maintain a clean control flow without introducing new scopes as with traditional catch blocks.
 - **Strongly typed Errors**: Enable typed errors that can be consumed or propagated from the callee to the caller.
 
-It's not enough to develop a library; the real goal is to build valid solutions that can inspire new standards in the language. Language design requires careful consideration, which is why we've defined core principles to ensure everything aligns with this broader vision:
+As you'll see, this library is incredibly minimal _(340B Gzipped)_. The true value of this project lies in the conventions around it, whose design philosophy is to **not require any third-party libraries**. This library is built solely to enhance the use of those conventions and potentially inspire new standards in the language to fully embrace them. As **language design** requires careful consideration, we've followed core principles to ensure everything aligns with this broader vision:
 
 - **Conventions over Abstractions**: Minimize abstractions by leveraging existing language features to their fullest.
 - **Minimal API**: Strive for simplicity without sacrificing functionality. Conciseness is often an indicator of robust and lasting design.
 - **Compatibility and Integrability**: Our solution shouldn't depend on universal adoption, and must seamlessly consume and be consumed by code not written with the same principles in mind.
 - **Intuitive and Ergonomic**: The patterns should be self-explanatory, allowing developers to grasp and implement them at a glance, minimizing the risk of misinterpretations that could result in anti-patterns or unexpected behaviors.
-- **Exploit TypeScript**: Leverage TypeScript's type system to provide immediate feedback through IDE features like syntax highlighting, error detection, and auto-completion.
+- **Exploit TypeScript**: Since TypeScript is a de facto standard, we leverage its type system to provide immediate feedback through IDE features like syntax highlighting, error detection, and auto-completion.
 
 # Convention
 
@@ -83,7 +83,7 @@ function task() {
 }
 ```
 
-Expected errors are part of the return value of the task. TypeScript's language server provides strong guidance when consuming these return values, which we now refer to as results.
+Expected errors are included in the return value of the task. TypeScript's language server provides strong guidance when consuming these return values, which we now refer to as results.
 
 ```typescript
 const result: string | Error = task();
@@ -206,7 +206,9 @@ The `$trycatch` utility allows you to handle unexpected errors in a clean, struc
 const [result, err] = $trycatch(task);
 ```
 
-This utility adopts a Go-style tuple approach: the first element represents the task’s result, and the second contains any unexpected error. By leveraging TypeScript’s type system, we ensure that the result remains `unknown` until the error is explicitly checked and handled, preventing the accidental use of the result when an error is present.
+This utility adopts a Go-style tuple approach: the first element represents the task’s result, and the second contains any unexpected error. Exactly one of these values will be present, while the other will be `null`.
+
+By leveraging TypeScript’s type system, we ensure that the result remains `unknown` until the error is explicitly checked and handled, preventing the accidental use of the result when an error is present.
 
 ```typescript
 const [result, err] = $trycatch(() => "succeed!");
@@ -221,9 +223,7 @@ result;
 // ?^ result: string
 ```
 
-JavaScript's dynamic nature means that anything can be thrown. To handle this, we encapsulate thrown values in an `Error` object and expose the original value through `Error.cause`.
-
-The utility also extends to asynchronous tasks and promises.
+`err` is an `Error` object that encapsulate the thrown values and expose them through `Error.cause`. The utility also extends to asynchronous tasks and promises.
 
 ```typescript
 // Async functions.
@@ -237,7 +237,7 @@ const [result, err] = await $trycatch(new Promise(...));
 Here is a list of known limitations:
 
 - `$trycatch` must be passed functions to be executed, rather than their results. While this isn't as seamless as a language feature would behave, it’s a limitation due to the constraints of JavaScript syntax. However, `$macro` and `$try` do not share this issue.
-- Return types must differs from `unknown` or `any`, as these types will obscure the expected error types in the result. You can work around this by wrapping the return value in an object like `{ value }`.
+- Return types must differ from `unknown` or `any`, as these types will obscure the expected error types in the result. You can work around this by wrapping the return value in an object like `{ value }`.
 - Errors and Promises have specific roles when used in return types and cannot be treated as generic values. While we believe this is a positive guideline rather than a limitation, you can still resolve this by using `{ value }` as a wrapper.
 - Union types of native JavaScript errors will be simplified in TypeScript to a single error type, losing valuable information. For example, `TypeError | RangeError` will be type reduced to `TypeError`. This is a limitation of the TypeScript errors typings and can be addressed by relying on custom errors and wrapping native ones when needed.
 
