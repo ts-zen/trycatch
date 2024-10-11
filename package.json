@@ -1,6 +1,7 @@
 {
   "name": "@tszen/trycatch",
   "version": "0.1.0",
+  "description": "Robust and Type-Safe Errors Management Conventions with Typescript",
   "type": "module",
   "exports": {
     ".": "./dist/index.js"
