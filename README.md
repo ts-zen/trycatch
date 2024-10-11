@@ -52,7 +52,7 @@ As you'll see, this library is incredibly minimal _(340B Gzipped)_. The true val
 
 - **Conventions over Abstractions**: Minimize abstractions by leveraging existing language features to their fullest.
 - **Minimal API**: Strive for simplicity without sacrificing functionality. Conciseness is often an indicator of robust and lasting design.
-- **Compatibility and Integrability**: Our solution shouldn't depend on universal adoption, and must seamlessly consume and be consumed by code not written with the same principles in mind.
+- **Progressive Enhancement**: Our solution shouldn't depend on universal adoption, and must seamlessly consume and be consumed by code not written with the same principles in mind.
 - **Intuitive and Ergonomic**: The patterns should be self-explanatory, allowing developers to grasp and implement them at a glance, minimizing the risk of misinterpretations that could result in anti-patterns or unexpected behaviors.
 - **Exploit TypeScript**: Since TypeScript is a de facto standard, we leverage its type system to provide immediate feedback through IDE features like syntax highlighting, error detection, and auto-completion.
 
@@ -105,7 +105,9 @@ function task() {
   if (condition2) return new CustomError2();
   return "value";
 }
+```
 
+```typescript
 // In another file...
 const result = task();
 
@@ -120,7 +122,9 @@ Since this approach works with plain JavaScript, you can seamlessly integrate ex
 
 ```typescript
 import { match } from "ts-pattern";
+```
 
+```typescript
 match(result)
   .with(P.instanceOf(CustomError1), () => {
     /* Handle CustomError1 */
@@ -133,7 +137,7 @@ match(result)
   });
 ```
 
-You can progressively enhance your codebase by wrapping third-party methods in tasks. The [$trycatch](#utility-trycatch) utility further enhances this process by eliminating the need for try/catch blocks.
+You can progressively enhance your codebase by wrapping third-party methods in tasks.
 
 ```typescript
 async function $fetch(input: string, init?: RequestInit) {
@@ -150,7 +154,7 @@ async function $fetch(input: string, init?: RequestInit) {
 }
 ```
 
-Composition is also possible, allowing tasks to be chained together while handling expected errors. The [$macro](#utility-macro) utility simplifies this process by managing the flow of expected errors across multiple tasks.
+The [$trycatch](#utility-trycatch) utility further enhances this process by eliminating the need for try/catch blocks. Composition is also possible, allowing tasks to be chained together while handling expected errors.
 
 ```typescript
 function task() {
@@ -165,6 +169,7 @@ function task() {
   const result = result1 + result2;
 }
 ```
+The [$macro](#utility-macro) utility simplifies this process by managing the flow of expected errors across multiple tasks.
 
 # Usage
 
@@ -188,7 +193,8 @@ function task2(): number | Error2;
 Given these task definitions, we can compute the sum of their results like so:
 
 ```typescript
-const result: number | Error1 | Error2 = $macro(function* ($try) {
+// ?^ result: number | Error1 | Error2
+const result = $macro(function* ($try) {
   const result1: number = yield* $try(task1());
   const result2: number = yield* $try(task2());
 
@@ -228,6 +234,9 @@ result;
 ```typescript
 // Async functions.
 const [result, err] = await $trycatch(async () => { ... });
+```
+
+```typescript
 // Or Promises.
 const [result, err] = await $trycatch(new Promise(...));
 ```
@@ -238,8 +247,8 @@ Here is a list of known limitations:
 
 - `$trycatch` must be passed functions to be executed, rather than their results. While this isn't as seamless as a language feature would behave, it’s a limitation due to the constraints of JavaScript syntax. However, `$macro` and `$try` do not share this issue.
 - Return types must differ from `unknown` or `any`, as these types will obscure the expected error types in the result. You can work around this by wrapping the return value in an object like `{ value }`.
-- Errors and Promises have specific roles when used in return types and cannot be treated as generic values. While we believe this is a positive guideline rather than a limitation, you can still resolve this by using `{ value }` as a wrapper.
-- Union types of native JavaScript errors will be simplified in TypeScript to a single error type, losing valuable information. For example, `TypeError | RangeError` will be type reduced to `TypeError`. This is a limitation of the TypeScript errors typings and can be addressed by relying on custom errors and wrapping native ones when needed.
+- Errors and Promises have specific roles when used in return types and cannot be treated as generic values. While we believe this is a positive guideline rather than a limitation, you can still get around this by using `{ value }` as a wrapper.
+- Union types of native JavaScript errors will be simplified in TypeScript to a single error type, losing valuable information. For example, `TypeError | RangeError` will be type reduced to `TypeError`. This is a limitation can be addressed by relying only on custom errors and wrapping native ones when needed.
 
 # License
 
